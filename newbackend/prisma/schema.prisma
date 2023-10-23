@@ -1,0 +1,191 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         Int       @id @default(autoincrement())
+  id_pemda   Int
+  username   String    @unique
+  email      String?   @unique
+  role       String
+  password   String
+  name       String
+  token      String
+  auditor    Int       @default(0)
+  created_at DateTime? @default(now())
+  update_at  DateTime? @default(now())
+
+  // Define the relationships
+  access_management       AccessManagement[]
+  ref_data_pemda          RefDataPemda       @relation(fields: [id_pemda], references: [id])
+  jawaban_capaian_created JawabanCapaian[]   @relation("created_by")
+  jawaban_capaian_updated JawabanCapaian[]   @relation("updated_by")
+
+  @@map("users")
+}
+
+model AccessManagement {
+  id                 Int       @id @default(autoincrement())
+  id_user            Int
+  id_pemda           Int
+  indikator_aset     Int
+  indikator_keuangan Int
+  created_at         DateTime? @default(now())
+  update_at          DateTime? @default(now())
+
+  // Define the relationships
+  user  User         @relation(fields: [id_user], references: [id])
+  pemda RefDataPemda @relation(fields: [id_pemda], references: [id])
+
+  @@map("access_management")
+}
+
+model RefDataPemda {
+  id                 Int       @id @default(autoincrement())
+  kode_pemda         Int
+  tahun              Int
+  nama_pemda         String
+  nama_kepala_daerah String
+  jumlah_satker      Int
+  created_at         DateTime? @default(now())
+  update_at          DateTime? @default(now())
+
+  // Define the relationships
+  users              User[]
+  ref_data_keuangan  RefDataKeuangan[]
+  ref_data_statistik RefDataStatistik[]
+  access_management  AccessManagement[]
+  jawaban_capaian    JawabanCapaian[]
+
+  @@map("ref_data_pemda")
+}
+
+model RefDataKeuangan {
+  id                   Int       @id @default(autoincrement())
+  id_pemda             Int
+  tahun                Int
+  nilai_anggaran       Int?
+  nomor_perkada_rkpd   String?
+  tanggal_perkada_rkpd DateTime?
+  nomor_kua_ppas       String?
+  tanggal_kua_ppas     DateTime?
+  nomor_perda_apbd     String?
+  tanggal_perda__apbd  DateTime?
+  created_at           DateTime? @default(now())
+  update_at            DateTime? @default(now())
+
+  // Define the relationships
+  pemda RefDataPemda @relation(fields: [id_pemda], references: [id])
+
+  @@map("ref_data_keuangan")
+}
+
+model RefDataStatistik {
+  id                           Int       @id @default(autoincrement())
+  id_pemda                     Int
+  tahun                        Int
+  capaian_ipm_nasional         Float?
+  capaian_ipm_pemda            Float?
+  pdrb_nasional                Float?
+  pdrb_pemda                   Float?
+  angka_kemiskinan_nasional    Float?
+  angka_kemiskinan_pemda       Float?
+  prevalensi_stunting_nasional Float?
+  prevalensi_stunting_pemda    Float?
+  created_at                   DateTime? @default(now())
+  update_at                    DateTime? @default(now())
+
+  // Define the relationships
+  pemda RefDataPemda @relation(fields: [id_pemda], references: [id])
+
+  @@map("ref_data_statistik")
+}
+
+model RefIndikator {
+  id             Int       @id @default(autoincrement())
+  nama_indikator String
+  created_at     DateTime? @default(now())
+  update_at      DateTime? @default(now())
+
+  // Define the relationships
+  ref_aspek RefAspek[]
+
+  @@map("ref_indikator")
+}
+
+model RefAspek {
+  id           Int       @id @default(autoincrement())
+  id_indikator Int
+  nama_aspek   String
+  bobot_total  Float
+  created_at   DateTime? @default(now())
+  update_at    DateTime? @default(now())
+
+  // Define the relationships
+  indikator     RefIndikator   @relation(fields: [id_indikator], references: [id])
+  ref_parameter RefParameter[]
+
+  @@map("ref_aspek")
+}
+
+model RefParameter {
+  id             Int       @id @default(autoincrement())
+  id_aspek       Int
+  nama_parameter String
+  point_total    Float
+  type           String
+  created_at     DateTime? @default(now())
+  update_at      DateTime? @default(now())
+
+  // Define the relationships
+  aspek          RefAspek         @relation(fields: [id_aspek], references: [id])
+  ref_kriteria   RefKriteria[]
+  JawabanCapaian JawabanCapaian[]
+
+  @@map("ref_parameter")
+}
+
+model RefKriteria {
+  id            Int       @id @default(autoincrement())
+  id_parameter  Int
+  nama_kriteria String
+  point         Float
+  type          String
+  created_at    DateTime? @default(now())
+  update_at     DateTime? @default(now())
+
+  // Define the relationships
+  parameter      RefParameter     @relation(fields: [id_parameter], references: [id])
+  JawabanCapaian JawabanCapaian[]
+
+  @@map("ref_kriteria")
+}
+
+model JawabanCapaian {
+  id           Int       @id @default(autoincrement())
+  tahun        Int
+  id_pemda     Int
+  id_parameter Int
+  id_kriteria  Int
+  created_by   Int
+  updated_by   Int?
+  created_at   DateTime? @default(now())
+  update_at    DateTime? @default(now())
+
+  // Define the relationships
+  pemda     RefDataPemda @relation(fields: [id_pemda], references: [id])
+  parameter RefParameter @relation(fields: [id_parameter], references: [id])
+  kriteria  RefKriteria  @relation(fields: [id_kriteria], references: [id])
+  createdBy User         @relation("created_by", fields: [created_by], references: [id])
+  updatedBy User?        @relation("updated_by", fields: [updated_by], references: [id])
+
+  @@map("jawaban_capaian")
+}
