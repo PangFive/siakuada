@@ -1,6 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import Cookies from 'js-cookie';
-import { useRouter } from 'next/navigation';
+// import { useDispatch } from "@/store/hooks";
+// import { changeAuth } from '@/store/apps/auth/authSlice';
 
 interface CallAPIProps extends AxiosRequestConfig {
   token?: boolean;
@@ -9,7 +10,7 @@ interface CallAPIProps extends AxiosRequestConfig {
 
 export default async function callAPI({ url, method, data, token, serverToken }: CallAPIProps) {
 
-  const route = useRouter();
+  // const dispatch = useDispatch();
 
   let headers = {};
   if (serverToken) {
@@ -37,10 +38,11 @@ export default async function callAPI({ url, method, data, token, serverToken }:
     headers,
   }).catch((err) => err.response);
 
-  if (response.status === 401) {
-    Cookies.remove('x-access-token');
-    route.push('/auth/login')
-  }
+  // if (response.status === 401) {
+
+  // dispatch(changeAuth(false));
+
+  // }
 
   return response;
 }

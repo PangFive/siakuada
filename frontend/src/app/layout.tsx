@@ -9,6 +9,8 @@ import { useSelector } from "@/store/hooks";
 import { RootState } from "@/store/store";
 import { Provider } from "react-redux";
 import NextTopLoader from 'nextjs-toploader';
+import Cookies from 'js-cookie';
+import { useRouter } from "next/navigation";
 
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
@@ -21,6 +23,16 @@ export const MyApp = ({ children }: { children: React.ReactNode }) => {
   const theme = ThemeSettings();
 
   const customizer = useSelector((state: RootState) => state.customizer);
+  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated)
+
+  const route = useRouter();
+
+  React.useEffect(() => {
+    if (!isAuthenticated) {
+      Cookies.remove('x-access-token');
+      route.push('/auth/login')
+    }
+  }, [isAuthenticated])
 
   return (
     <>
@@ -35,12 +47,9 @@ export const MyApp = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = React.useState(false);
+
   React.useEffect(() => {
     setTimeout(() => setLoading(true), 50);
   }, []);

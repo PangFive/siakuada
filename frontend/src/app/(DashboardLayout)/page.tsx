@@ -11,14 +11,21 @@ import { useRouter } from 'next/navigation';
 import jwtDecode from 'jwt-decode';
 import Cookies from 'js-cookie';
 
+import { useDispatch } from "@/store/hooks";
+import { changeAuth } from '@/store/apps/auth/authSlice';
+
 export default function Dashboard() {
 
   const route = useRouter();
 
   const [isLoading, setLoading] = useState(true);
+  const dispatch = useDispatch();
 
   const getAuth = useCallback(async () => {
     const response = await callAPI({ url: '/auth', method: "GET", serverToken: Cookies.get('x-access-token') })
+    if (response.status !== 200) {
+      dispatch(changeAuth(false));
+    }
   }, []);
 
   useEffect(() => {

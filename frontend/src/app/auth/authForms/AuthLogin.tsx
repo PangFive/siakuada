@@ -8,7 +8,7 @@ import {
 import { loginType } from "@/app/(DashboardLayout)/types/auth/auth";
 import CustomTextField from "@/app/(DashboardLayout)/components/forms/theme-elements/CustomTextField";
 import CustomFormLabel from "@/app/(DashboardLayout)/components/forms/theme-elements/CustomFormLabel";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import callAPI from "@/config/api/callApi";
 import { useRouter } from "next/navigation";
 import AlertCart from "@/app/(DashboardLayout)/components/shared/AlertCart";
@@ -16,6 +16,9 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import Cookies from 'js-cookie';
 
+import { useDispatch, useSelector } from "@/store/hooks";
+import { changeAuth } from '@/store/apps/auth/authSlice';
+import { RootState } from "@/store/store";
 
 const validationSchema = yup.object({
   password: yup
@@ -35,6 +38,9 @@ const AuthLogin = ({ title, subtitle, subtext }: loginType) => {
   const [loading, setLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const route = useRouter();
+  const dispatch = useDispatch();
+
+  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated)
 
   const handleClick = () => {
     setCartalert(true);
@@ -59,7 +65,7 @@ const AuthLogin = ({ title, subtitle, subtext }: loginType) => {
       setIsError(false);
       handleClick();
       Cookies.set("x-access-token", response.data.data.token, { expires: 7 });
-
+      dispatch(changeAuth(true));
       setTimeout(() => {
         route.push('/')
       }, 600)

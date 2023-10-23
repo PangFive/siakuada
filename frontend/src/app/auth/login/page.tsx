@@ -6,6 +6,7 @@ import AuthLogin from '../authForms/AuthLogin';
 import Image from 'next/image';
 
 export default function Login() {
+
   return (
     <PageContainer title="Login Page" description="Login page for auth">
       <Grid container spacing={0} justifyContent="center" sx={{ height: '100vh' }}>
