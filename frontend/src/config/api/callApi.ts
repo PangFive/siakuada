@@ -1,15 +1,16 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import Cookies from 'js-cookie';
-import { API_URI } from '../../utils/constant.utils';
+import { useRouter } from 'next/navigation';
 
 interface CallAPIProps extends AxiosRequestConfig {
   token?: boolean;
   serverToken?: string;
 }
 
-export default async function callAPI({
-  url, method, data, token, serverToken
-}: CallAPIProps) {
+export default async function callAPI({ url, method, data, token, serverToken }: CallAPIProps) {
+
+  const route = useRouter();
+
   let headers = {};
   if (serverToken) {
     headers = {
@@ -20,7 +21,7 @@ export default async function callAPI({
     if (tokenCookies) {
       const jwtToken = atob(tokenCookies);
       headers = {
-        "x-access-token": `${serverToken}`,
+        "x-access-token": `${jwtToken}`,
       };
     }
   }
@@ -35,6 +36,11 @@ export default async function callAPI({
     data,
     headers,
   }).catch((err) => err.response);
+
+  if (response.status === 401) {
+    Cookies.remove('x-access-token');
+    route.push('/auth/login')
+  }
 
   return response;
 }

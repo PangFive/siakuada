@@ -8,6 +8,8 @@ import StatusPenginputan from './components/dashboards/StatusPenginputan';
 import MapCard from './components/dashboards/MapCard';
 import callAPI from '@/config/api/callApi';
 import { useRouter } from 'next/navigation';
+import jwtDecode from 'jwt-decode';
+import Cookies from 'js-cookie';
 
 export default function Dashboard() {
 
@@ -16,11 +18,7 @@ export default function Dashboard() {
   const [isLoading, setLoading] = useState(true);
 
   const getAuth = useCallback(async () => {
-    const response = await callAPI({ url: '/auth', method: "GET", serverToken: localStorage.token })
-    if (response.status !== 200) {
-      localStorage.clear();
-      route.push('/auth/login')
-    }
+    const response = await callAPI({ url: '/auth', method: "GET", serverToken: Cookies.get('x-access-token') })
   }, []);
 
   useEffect(() => {

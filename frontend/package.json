@@ -24,6 +24,7 @@
     "framer-motion": "^10.16.4",
     "i18next": "^23.5.1",
     "js-cookie": "^3.0.5",
+    "jwt-decode": "^3.1.2",
     "lodash": "^4.17.21",
     "next": "latest",
     "nextjs-toploader": "^1.4.2",
@@ -44,6 +45,7 @@
   },
   "devDependencies": {
     "@types/js-cookie": "^3.0.5",
+    "@types/jwt-decode": "^3.1.0",
     "@types/lodash": "^4.14.199",
     "@types/node": "latest",
     "@types/react": "latest",

@@ -6,7 +6,7 @@ type Props = {
 
 const PageContainer = ({ title, description, children }: Props) => (
   <div>
-    <title>{title}</title>
+    <title>{title + " - SIAKUAda"}</title>
     <meta name="description" content={description} />
     {children}
   </div>
