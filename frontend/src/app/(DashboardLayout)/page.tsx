@@ -6,13 +6,11 @@ import PageContainer from '@/app/(DashboardLayout)/components/container/PageCont
 import WelcomeCard from '@/app/(DashboardLayout)/components/dashboards/WelcomeCard';
 import StatusPenginputan from './components/dashboards/StatusPenginputan';
 import MapCard from './components/dashboards/MapCard';
-import callAPI from '@/config/api/callApi';
-import { useRouter } from 'next/navigation';
-import jwtDecode from 'jwt-decode';
-import Cookies from 'js-cookie';
+import ProductPerformances from './components/dashboards/ProductPerformances';
 
+import { useRouter } from 'next/navigation';
 import { useDispatch } from "@/store/hooks";
-import { changeAuth } from '@/store/apps/auth/authSlice';
+import { checkAuth } from '@/store/apps/auth/authSlice';
 
 export default function Dashboard() {
 
@@ -21,15 +19,8 @@ export default function Dashboard() {
   const [isLoading, setLoading] = useState(true);
   const dispatch = useDispatch();
 
-  const getAuth = useCallback(async () => {
-    const response = await callAPI({ url: '/auth', method: "GET", serverToken: Cookies.get('x-access-token') })
-    if (response.status !== 200) {
-      dispatch(changeAuth(false));
-    }
-  }, []);
-
   useEffect(() => {
-    getAuth()
+    dispatch(checkAuth())
     setLoading(false);
   }, []);
 
@@ -50,6 +41,10 @@ export default function Dashboard() {
           <Grid item xs={12} lg={12}>
             <MapCard />
           </Grid>
+
+          {/* <Grid item xs={12} lg={12}>
+            <ProductPerformances />
+          </Grid> */}
         </Grid>
       </Box>
     </PageContainer>

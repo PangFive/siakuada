@@ -14,10 +14,10 @@ const AlertCart = ({ handleClose, openCartAlert, text, jenis = 'success' }: Prop
       <Snackbar
         open={openCartAlert}
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-        autoHideDuration={1000}
+        autoHideDuration={1500}
         onClose={handleClose}
       >
-        <Alert severity={jenis} variant="filled" sx={{ width: '100%', color: 'white' }}>
+        <Alert severity={jenis} variant="filled" sx={{ width: '200%', color: 'white' }}>
           {text}
         </Alert>
       </Snackbar>

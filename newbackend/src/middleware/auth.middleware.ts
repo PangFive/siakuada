@@ -5,7 +5,7 @@ const isAuthenticated = async ({ set, headers, jwt, cookie, setCookie }: any) =>
   let token: string = headers["x-access-token"] || cookie["x-access-token"];
 
   if (!token) {
-    set.status = 403;
+    set.status = 401;
 
     return res({
       status: "error",

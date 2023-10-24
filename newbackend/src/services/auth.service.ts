@@ -11,6 +11,7 @@ const getUserByUsername = async (username: string) => {
       password: true,
       name: true,
       email: true,
+      id_pemda: true
     },
   });
 

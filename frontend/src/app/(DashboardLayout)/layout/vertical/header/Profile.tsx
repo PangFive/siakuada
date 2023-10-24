@@ -14,6 +14,8 @@ import * as dropdownData from './data';
 import { IconMail } from '@tabler/icons-react';
 import { Stack } from '@mui/system';
 import Image from 'next/image';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
 
 
 const Profile = () => {
@@ -24,6 +26,8 @@ const Profile = () => {
   const handleClose2 = () => {
     setAnchorEl2(null);
   };
+
+  const userInfo = useSelector((state: RootState) => state.auth.infoUser)
 
   return (
     <Box>
@@ -72,10 +76,7 @@ const Profile = () => {
           <Avatar src={"/images/profile/user-1.jpg"} alt={"ProfileImg"} sx={{ width: 95, height: 95 }} />
           <Box>
             <Typography variant="subtitle2" color="textPrimary" fontWeight={600}>
-              Mathew Anderson
-            </Typography>
-            <Typography variant="subtitle2" color="textSecondary">
-              Designer
+              {userInfo.name}
             </Typography>
             <Typography
               variant="subtitle2"
@@ -85,7 +86,7 @@ const Profile = () => {
               gap={1}
             >
               <IconMail width={15} height={15} />
-              info@modernize.com
+              {userInfo.email}
             </Typography>
           </Box>
         </Stack>

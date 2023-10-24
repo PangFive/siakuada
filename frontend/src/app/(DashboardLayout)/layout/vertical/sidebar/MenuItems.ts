@@ -43,13 +43,13 @@ const Menuitems: MenuitemsType[] = [
     id: uniqueId(),
     title: "Keuangan",
     icon: IconBuildingBank,
-    href: "/auth/login",
+    href: "/indikator/keuangan",
   },
   {
     id: uniqueId(),
     title: "Aset",
     icon: IconTrain,
-    href: "/auth/login",
+    href: "/indikator/aset",
   },
   {
     navlabel: true,

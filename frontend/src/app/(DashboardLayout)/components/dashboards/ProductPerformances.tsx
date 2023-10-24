@@ -21,10 +21,10 @@ import {
 
 const ProductPerformances = () => {
   // for select
-  const [month, setMonth] = React.useState('1');
+  const [tahun, setTahun] = React.useState('2023');
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setMonth(event.target.value);
+    setTahun(event.target.value);
   };
 
   // chart color
@@ -195,18 +195,18 @@ const ProductPerformances = () => {
 
   return (
     <DashboardCard
-      title="Belum tau buat apa"
+      title="Keuangan Daerah"
       action={
         <CustomSelect
           labelId="month-dd"
           id="month-dd"
           size="small"
-          value={month}
+          value={tahun}
           onChange={handleChange}
         >
-          <MenuItem value={1}>March 2023</MenuItem>
-          <MenuItem value={2}>April 2023</MenuItem>
-          <MenuItem value={3}>May 2023</MenuItem>
+          <MenuItem value={2023}>2023</MenuItem>
+          <MenuItem value={2022}>2022</MenuItem>
+          <MenuItem value={2021}>2021</MenuItem>
         </CustomSelect>
       }
     >

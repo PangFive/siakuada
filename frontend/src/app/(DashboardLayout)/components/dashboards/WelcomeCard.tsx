@@ -2,9 +2,12 @@ import React from 'react';
 import { Box, Avatar, Typography, Card, CardContent, Grid, Divider, Stack, useTheme } from '@mui/material';
 import { IconArrowUpRight } from '@tabler/icons-react';
 import Image from 'next/image';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
 
 const WelcomeCard = () => {
   const theme = useTheme();
+  const userInfo = useSelector((state: RootState) => state.auth.infoUser)
   return (
     <Card elevation={0} style={{ background: `linear-gradient(90deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.light} 100%)` }} sx={{ color: 'white', py: 0 }}>
       <CardContent sx={{ py: 4, px: 2 }}>
@@ -23,7 +26,7 @@ const WelcomeCard = () => {
               >
                 <Avatar src='/images/profile/user-1.jpg' alt="img" sx={{ width: 40, height: 40 }} />
                 <Typography variant="h5" whiteSpace="nowrap">
-                  Selamat datang, T. Wahyu Munawarah
+                  Selamat datang, {userInfo.name}
                 </Typography>
               </Box>
 

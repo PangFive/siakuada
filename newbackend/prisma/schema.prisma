@@ -116,7 +116,8 @@ model RefIndikator {
   update_at      DateTime? @default(now())
 
   // Define the relationships
-  ref_aspek RefAspek[]
+  ref_aspek      RefAspek[]
+  JawabanCapaian JawabanCapaian[]
 
   @@map("ref_indikator")
 }
@@ -130,8 +131,9 @@ model RefAspek {
   update_at    DateTime? @default(now())
 
   // Define the relationships
-  indikator     RefIndikator   @relation(fields: [id_indikator], references: [id])
-  ref_parameter RefParameter[]
+  indikator      RefIndikator     @relation(fields: [id_indikator], references: [id])
+  ref_parameter  RefParameter[]
+  JawabanCapaian JawabanCapaian[]
 
   @@map("ref_aspek")
 }
@@ -140,7 +142,7 @@ model RefParameter {
   id             Int       @id @default(autoincrement())
   id_aspek       Int
   nama_parameter String
-  point_total    Float
+  bobot          Float
   type           String
   created_at     DateTime? @default(now())
   update_at      DateTime? @default(now())
@@ -173,6 +175,8 @@ model JawabanCapaian {
   id           Int       @id @default(autoincrement())
   tahun        Int
   id_pemda     Int
+  id_indikator Int
+  id_aspek     Int
   id_parameter Int
   id_kriteria  Int
   created_by   Int
@@ -182,6 +186,8 @@ model JawabanCapaian {
 
   // Define the relationships
   pemda     RefDataPemda @relation(fields: [id_pemda], references: [id])
+  indikator RefIndikator @relation(fields: [id_indikator], references: [id])
+  aspek     RefAspek     @relation(fields: [id_aspek], references: [id])
   parameter RefParameter @relation(fields: [id_parameter], references: [id])
   kriteria  RefKriteria  @relation(fields: [id_kriteria], references: [id])
   createdBy User         @relation("created_by", fields: [created_by], references: [id])

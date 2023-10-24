@@ -9,6 +9,8 @@ export const Profile = () => {
   const lgUp = useMediaQuery((theme: any) => theme.breakpoints.up('lg'));
   const hideMenu = lgUp ? customizer.isCollapse && !customizer.isSidebarHover : '';
 
+  const userInfo = useSelector((state: RootState) => state.auth.infoUser)
+
   return (
     <Box
       display={'flex'}
@@ -21,7 +23,7 @@ export const Profile = () => {
           <Avatar alt="Remy Sharp" src={"/images/profile/user-1.jpg"} sx={{ height: 40, width: 40 }} />
 
           <Box>
-            <Typography variant="h6">Wahyu</Typography>
+            <Typography variant="h6">{userInfo.username}</Typography>
             <Typography variant="caption">Inspektorat</Typography>
           </Box>
           <Box sx={{ ml: 'auto' }}>
